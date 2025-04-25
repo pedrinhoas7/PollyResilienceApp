@@ -78,9 +78,6 @@ dotnet restore
 dotnet run
 ```
 
-A API estará disponível em:  
-👉 `https://localhost:7048/swagger/index.html`
-
 ---
 
 ## 🛠️ Endpoints Disponíveis
