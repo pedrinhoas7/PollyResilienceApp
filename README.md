@@ -150,4 +150,4 @@ dotnet run
 ## 👨‍💻 Autor
 
 Desenvolvido com 💙 por **Pedro Henrique**  
-[LinkedIn](https://www.linkedin.com/in/seu-perfil/) | [GitHub](https://github.com/pedrinhoas7)
+[GitHub](https://github.com/pedrinhoas7)
