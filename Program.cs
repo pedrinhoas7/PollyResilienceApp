@@ -23,7 +23,8 @@ builder.Services.AddHttpClient("Client", client =>
     return httpClient;
 }).AddPolicyHandler((serviceProvider, request) =>
     PollyResilienceApp.Policies.PollyConfigPolicyBuilder.Build(serviceProvider)
-);
+)
+.AddTypedClient(p => Refit.RestService.For<IHttpClient>(p));
 
 
 builder.Services.AddControllers();

@@ -2,7 +2,8 @@
 {
     public interface IResillienceService
     {
-        public Task<string> GetInternalServeError();
-        public Task<object> SendManyRequests();
+        public Task<object> RetryAndCircuitBreak();
+        public Task<object> ForceRetry();
+        public Task<object> SendManyRequestsToEnableBulkhead();
     }
 }

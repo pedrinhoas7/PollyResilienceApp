@@ -7,7 +7,7 @@ namespace PollyResilienceApp.Configurations
         [Get("/500")]
         Task<string> GetInternalServeError();
 
-        [Get("/200?sleep=50000")]
+        [Post("/201")]
         Task<string> GetOk();
     }
 }

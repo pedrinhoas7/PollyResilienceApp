@@ -4,8 +4,8 @@ using PollyResilienceApp.Interfaces;
 
 namespace PollyResilienceApp.Controllers
 {
+    [Route("")]
     [ApiController]
-    [Route("[controller]")]
     public class ResillienceController : ControllerBase
     {
         private readonly IResillienceService _service;
@@ -16,15 +16,21 @@ namespace PollyResilienceApp.Controllers
         }
 
         [HttpGet("Simulate/RetryAndCircuitBreak")]
-        public async Task<string> GetInternalServeError()
+        public async Task<object> RetryAndCircuitBreak()
         {
-            return await _service.GetInternalServeError();
+            return await _service.RetryAndCircuitBreak();
+        }
+
+        [HttpGet("Simulate/Retry")]
+        public async Task<object> ForceRetry()
+        {
+            return await _service.ForceRetry();
         }
 
         [HttpGet("Simulate/Bulkhead")]
-        public async Task<IActionResult> SendManyRequests()
+        public async Task<IActionResult> SendManyRequestsToEnableBulkhead()
         {
-            var result = await _service.SendManyRequests();
+            var result = await _service.SendManyRequestsToEnableBulkhead();
             return Ok(result);
         }
     }
