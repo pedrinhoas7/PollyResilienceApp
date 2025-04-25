@@ -5,19 +5,19 @@ namespace PollyResilienceApp.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class ResillienceController : ControllerBase
     {
 
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<ResillienceController> _logger;
         private readonly IHttpClient _client;
 
-        public WeatherForecastController(IHttpClient client)
+        public ResillienceController(IHttpClient client)
         {
             _client = client;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet]
         public async Task<object> Get()
         {
             return await _client.GetAll();
