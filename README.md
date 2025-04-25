@@ -1,41 +1,36 @@
-# Polly Resilience API
-![image](https://github.com/user-attachments/assets/cd0700c9-4068-48fa-b975-ea9eeaf75a45)
+# 🦜Polly Resilience API
 
+Este projeto é uma API em **.NET 8** que utiliza o [Polly](https://github.com/App-vNext/Polly) para implementar padrões de resiliência como **Retry**, **Circuit Breaker**, **Timeout** e **Bulkhead**.  
+O objetivo é demonstrar como proteger aplicações de falhas temporárias e garantir maior robustez em chamadas HTTP.
 
-Este projeto é uma API baseada em .NET 8 que utiliza o [Polly](https://github.com/App-vNext/Polly) para implementar padrões de resiliência como Retry, Circuit Breaker, Timeout e Bulkhead. O objetivo é demonstrar a aplicação de políticas de resiliência em requisições HTTP, garantindo que a API seja capaz de lidar com falhas temporárias e erros com maior robustez.
+---
 
-## Funcionalidades
+## ✨ Funcionalidades
 
-- **Retry Policy**: Reintenta uma requisição HTTP falhada até um número máximo de tentativas com um intervalo de tempo entre as tentativas.
-- **Circuit Breaker**: Quando o número de falhas consecutivas excede um limite, a API "abre o circuito" e impede novas tentativas por um tempo determinado.
-- **Timeout**: Define um tempo limite para a resposta da requisição HTTP.
-- **Bulkhead**: Limita o número de requisições paralelas que podem ser feitas, prevenindo que um pico de carga sobrecarregue o sistema.
+- **Retry Policy**: Tenta novamente uma requisição falha um número configurável de vezes.
+- **Circuit Breaker**: Abre o circuito após um número limite de falhas consecutivas, bloqueando novas requisições temporariamente.
+- **Timeout Policy**: Garante que requisições não fiquem presas indefinidamente.
+- **Bulkhead Policy**: Controla o número máximo de requisições simultâneas, isolando sobrecargas.
 
-## Estrutura do Projeto
+---
 
-O projeto é estruturado da seguinte forma:
+## 📂 Estrutura do Projeto
 
-- **ResilienceController**: Controller para simular as requisições.
-- **PollyResilienceApp.Policies**: Contém as políticas de resiliência configuradas usando o Polly.
-- **PollySettings**: Contém as configurações relacionadas às políticas de resiliência, como o número de tentativas, o tempo de espera, etc.
-- **Program.cs**: Onde as configurações e as políticas são aplicadas ao `HttpClient`.
+- **ResilienceController**: Controller que expõe endpoints para simular cenários de falha e resiliência.
+- **PollyConfigPolicyBuilder**: Responsável por construir e aplicar as políticas do Polly.
+- **Program.cs**: Configuração da API, HttpClient e injeções de dependência.
 
-## Pré-requisitos
+---
 
-Antes de rodar o projeto, é necessário ter o seguinte instalado:
+## 🔧 Pré-requisitos
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 
-## Configuração
+---
 
-As configurações de resiliência são definidas no arquivo `appsettings.json`. O arquivo contém configurações como:
+## ⚙️ Configurações
 
-- **Retry**: Configura o número de tentativas e o tempo de espera entre as tentativas.
-- **CircuitBreaker**: Define o limiar de falhas para abrir o circuito e o tempo de duração do "break".
-- **Timeout**: Configura o tempo máximo de espera para uma requisição.
-- **Bulkhead**: Define a quantidade máxima de requisições simultâneas e a quantidade máxima de requisições na fila.
-
-### Exemplo de `appsettings.json`
+As políticas de resiliência são configuradas via `appsettings.json`. Exemplo:
 
 ```json
 {
@@ -60,60 +55,99 @@ As configurações de resiliência são definidas no arquivo `appsettings.json`.
 }
 ```
 
-## Como Executar
+---
 
-### Passo 1: Clone o repositório
+## 🚀 Como Executar
 
-Clone o repositório para o seu ambiente local:
+1. **Clone o repositório**:
 
 ```bash
 git clone https://github.com/pedrinhoas7/PollyResilienceApp.git
 cd PollyResilienceApp
 ```
 
-### Passo 2: Instale as dependências
-
-Use o seguinte comando para restaurar as dependências do projeto:
+2. **Restaure as dependências**:
 
 ```bash
 dotnet restore
 ```
 
-### Passo 3: Execute o projeto
-
-Execute o projeto com o comando:
+3. **Execute o projeto**:
 
 ```bash
 dotnet run
 ```
 
-A API estará disponível em `https://localhost:7048/swagger/index.html`.
+---
 
-## Endpoints
+## 🛠️ Endpoints Disponíveis
 
-### `GET /Resillience`
+### 🔄 `GET /Simulate/RetryAndCircuitBreak`
 
-Este endpoint faz uma requisição HTTP para um serviço externo, utilizando as políticas configuradas com Polly.
+- **Descrição**: 
+  - Simula falhas contínuas para ativar a política de **Retry** até o limite e, eventualmente, acionar o **Circuit Breaker**.
+- **Resposta esperada**: 
+  - Uma exceção indicando que o circuito foi aberto após repetidas falhas.
 
-- **Políticas aplicadas**:
-  - Retry: Reintenta a requisição até x vezes.
-  - Circuit Breaker: Se o serviço falhar em 50% das requisições, o circuito será aberto por x segundos.
-  - Timeout: Limita a resposta a x segundos.
-  - Bulkhead: Limita o número de requisições simultâneas a x.
+---
 
-### Exemplo de resposta
+### 🔁 `GET /Simulate/Retry`
 
-#### ERRO 500
+- **Descrição**: 
+  - Simula múltiplas tentativas de requisição usando apenas a política de **Retry**.
+- **Exemplo de resposta**:
 
-- Utiliza do retry 4 vezes;
-- Circuit break fecha apos a tentativa e os 4 retrys
-- No 5 retry retorna a exceção de que o circuito está fechado
-- Apos 30 segundos o circuito e aberto novamente para aceitar novas chamadas
+```json
+[
+  "Retry 1 after 00:00:05",
+  "Retry 2 after 00:00:05",
+  "Retry 3 after 00:00:05",
+  "Retry 4 after 00:00:05",
+  "Retry 5 after 00:00:05",
+  "Retry 6 after 00:00:05",
+  "Response: InternalServerError"
+]
+```
 
-![image](https://github.com/user-attachments/assets/74474744-cb23-4fcb-8675-772d074865a9)
+---
+
+### 🧱 `GET /Simulate/BulkHead`
+
+- **Descrição**: 
+  - Simula várias requisições simultâneas para demonstrar o funcionamento do **Bulkhead**, aceitando algumas e rejeitando outras.
+- **Exemplo de resposta**:
+
+```json
+[
+  "Task 0: OK",
+  "Task 1: OK",
+  "Task 2: OK",
+  "Task 3: OK",
+  "Task 4: OK",
+  "Task 5: OK",
+  "Task 6: Rejeitada pelo Bulkhead",
+  "Task 7: Rejeitada pelo Bulkhead",
+  "Task 8: Rejeitada pelo Bulkhead",
+  "Task 9: Rejeitada pelo Bulkhead",
+  "Task 10: Rejeitada pelo Bulkhead",
+  "Task 11: Rejeitada pelo Bulkhead",
+  "Task 12: Rejeitada pelo Bulkhead",
+  "Task 13: Rejeitada pelo Bulkhead",
+  "Task 14: Rejeitada pelo Bulkhead"
+]
+```
+
+---
+
+## ⚡ Políticas aplicadas
+
+- **Retry**: Reenvia a requisição falha até o número configurado de vezes.
+- **Circuit Breaker**: Abre o circuito após atingir o limite de falhas (Ex: 50% das chamadas).
+- **Timeout**: Aborta chamadas que ultrapassam o tempo limite configurado.
+- **Bulkhead**: Limita a quantidade de requisições simultâneas, isolando sobrecargas.
 
 
-##
+## 👨‍💻 Autor
 
-👨‍💻 Autor
-Desenvolvido com 💙 por Pedro Henrique
+Desenvolvido com 💙 por **Pedro Henrique**  
+[GitHub](https://github.com/pedrinhoas7)
