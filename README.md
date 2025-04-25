@@ -1,4 +1,6 @@
 # Polly Resilience API
+![image](https://github.com/user-attachments/assets/cd0700c9-4068-48fa-b975-ea9eeaf75a45)
+
 
 Este projeto é uma API baseada em .NET 8 que utiliza o [Polly](https://github.com/App-vNext/Polly) para implementar padrões de resiliência como Retry, Circuit Breaker, Timeout e Bulkhead. O objetivo é demonstrar a aplicação de políticas de resiliência em requisições HTTP, garantindo que a API seja capaz de lidar com falhas temporárias e erros com maior robustez.
 
