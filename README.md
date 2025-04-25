@@ -103,16 +103,17 @@ Este endpoint faz uma requisição HTTP para um serviço externo, utilizando as 
 
 ### Exemplo de resposta
 
-#### Sucesso
+#### ERRO 500
 
-```json
-{
-  "userId": 1,
-  "id": 2,
-  "title": "quis ut nam facilis et officia qui",
-  "completed": false
-}
-```
+- Utiliza do retry 4 vezes;
+- Circuit break fecha apos a tentativa e os 4 retrys
+- No 5 retry retorna a exceção de que o circuito está fechado
+- Apos 30 segundos o circuito e aberto novamente para aceitar novas chamadas
+
+![image](https://github.com/user-attachments/assets/74474744-cb23-4fcb-8675-772d074865a9)
+
+
+##
 
 👨‍💻 Autor
 Desenvolvido com 💙 por Pedro Henrique
