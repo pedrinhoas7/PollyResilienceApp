@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PollyResilienceApp.Configurations;
+using PollyResilienceApp.Interfaces;
 
 namespace PollyResilienceApp.Controllers
 {
@@ -7,20 +8,24 @@ namespace PollyResilienceApp.Controllers
     [Route("[controller]")]
     public class ResillienceController : ControllerBase
     {
+        private readonly IResillienceService _service;
 
-
-        private readonly ILogger<ResillienceController> _logger;
-        private readonly IHttpClient _client;
-
-        public ResillienceController(IHttpClient client)
+        public ResillienceController(IResillienceService service)
         {
-            _client = client;
+            _service = service;
         }
 
-        [HttpGet]
-        public async Task<object> Get()
+        [HttpGet("Simulate/RetryAndCircuitBreak")]
+        public async Task<string> GetInternalServeError()
         {
-            return await _client.GetAll();
+            return await _service.GetInternalServeError();
+        }
+
+        [HttpGet("Simulate/Bulkhead")]
+        public async Task<IActionResult> SendManyRequests()
+        {
+            var result = await _service.SendManyRequests();
+            return Ok(result);
         }
     }
 }
